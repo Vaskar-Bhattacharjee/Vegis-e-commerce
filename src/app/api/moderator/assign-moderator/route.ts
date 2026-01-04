@@ -8,10 +8,6 @@ const authSchema = z.object({
   email: z.email(),
   role: z.enum(["admin", "moderator"]),
 });
-
-
-
-
 export async function POST(req: Request) {
     try {
          await dbConnect();
@@ -25,8 +21,7 @@ export async function POST(req: Request) {
         const inviteLink = `${process.env.NEXT_PUBLIC_URL}/invite/?token=${invitationToken}`;
         const existingUser = await User.findOne({ email });
         let user;
-        if (!existingUser) {
-                
+        if (!existingUser) {                
                 const newUser = await User.create({ 
                      email,
                      role,
@@ -35,8 +30,7 @@ export async function POST(req: Request) {
                      invitationToken,
                      invitationTokenExpiry
                     });
-                user = newUser;
-                
+                user = newUser;               
                 
             } else {
                 existingUser.role = role;

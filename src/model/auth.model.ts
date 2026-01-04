@@ -8,7 +8,8 @@ export interface User extends Document {
     invitationToken: string;
     isAcceptedbyUser: boolean;
     invitationTokenExpiry: Date;
-    isBlocked: boolean
+    isBlocked: boolean;
+    refreshToken: string;
     
 
 }
@@ -52,6 +53,10 @@ const userSchema: Schema<User> = new mongoose.Schema({
     isBlocked: {
         type: Boolean,
         default: false
+    },
+    refreshToken: {
+      type: String,
+      required: false,
     },
     
 },{

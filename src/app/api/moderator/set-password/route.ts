@@ -3,6 +3,7 @@ import User from "@/src/model/auth.model";
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 
 const passwordSchema = z.object({
   token: z.string(),
@@ -32,7 +33,35 @@ export async function POST(req: Request) {
     user.invitationToken = "";
     user.invitationTokenExpiry = new Date(0);
     await user.save();
-    return NextResponse.json({ message: "Password set successfully" }, { status: 200 });
+    const refreshTokenPayload = { 
+      id: user._id,      
+     };
+     const accessTokenPayload = {
+      id: user._id,
+      email: user.email,
+      role: user.role
+     }
+    const accessToken = jwt.sign(accessTokenPayload, process.env.JWT_ACCESS_SECRET as string,{ expiresIn: "15m" });
+
+    const refreshToken = jwt.sign(refreshTokenPayload, process.env.JWT_REFRESH_SECRET as string, { expiresIn: "365d"} );
+    user.refreshToken = refreshToken;
+
+    await user.save();
+    const response = NextResponse.json(
+      { 
+        message: "Password set successfully", 
+        accessToken,
+        user: { email: user.email, role: user.role } 
+      }, 
+      { status: 200 }
+    );
+    response.cookies.set("refreshToken", refreshToken, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 365 * 24 * 60 * 60,
+    });
+    return response;
   } catch (error) {
     console.log(error);
     return NextResponse.json({ message: "password set failed totally" }, { status: 500 });
