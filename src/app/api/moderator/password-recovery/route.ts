@@ -1,3 +1,4 @@
+import { sendPasswordResetEmail } from "@/src/helpers/email-sender-reset";
 import User from "@/src/model/auth.model";
 export async function POST(req: Request) {
     const { email } = await req.json();
@@ -14,7 +15,15 @@ export async function POST(req: Request) {
     await user.save();
 
     const resetUrl = `${process.env.FRONTEND_URL}/reset-password/${resetToken}`;
-    
+    const emailResponse = await sendPasswordResetEmail({ 
+            email: user.email, 
+            resetLink: resetUrl 
+        });
 
-    return Response.json({ message: "Email sent" });
+        if (!emailResponse.success) {
+            return Response.json({ message: "Failed to send email" }, { status: 500 });
+        }
+
+        return Response.json({ message: "Email sent" }, { status: 200 });
+    
 }
