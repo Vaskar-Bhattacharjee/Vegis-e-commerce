@@ -9,7 +9,9 @@ export interface User extends Document {
     isAcceptedbyUser: boolean;
     invitationTokenExpiry: Date;
     isBlocked: boolean;
-    refreshToken: string;
+    refreshToken: string;   
+    resetPasswordToken: string;
+    resetPasswordExpire: Date;
     
 
 }
@@ -56,6 +58,14 @@ const userSchema: Schema<User> = new mongoose.Schema({
     },
     refreshToken: {
       type: String,
+      required: false,
+    },
+    resetPasswordToken: {
+      type: String,
+      required: false,
+    },
+    resetPasswordExpire: {
+      type: Date,
       required: false,
     },
     
