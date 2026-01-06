@@ -43,13 +43,14 @@ export async function POST(req: Request) {
        
         response.cookies.set("refreshToken", refreshToken, {
             httpOnly: true,
-            sameSite: "strict", 
+            sameSite: "lax", 
             maxAge: 365 * 24 * 60 * 60, 
             path: "/",
         });
 
         return response;
-    } catch (error) {
+    } catch (error: unknown) {
+        console.log("Error while logging in:", error);
         return NextResponse.json({ error ,message: "Server error while logging in" }, { status: 500 });
     }
 }

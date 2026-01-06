@@ -1,0 +1,73 @@
+import { dbConnect } from "@/src/lib/dbConnect";
+import imagekit from "@/src/lib/imagekit";
+import Product from "@/src/model/product.model";
+import { NextResponse } from "next/server";
+import { z } from "zod";
+
+
+const productUpdateSchema = z.object({
+    id: z.string(),
+    name: z.string().optional(),
+    description: z.string().optional(),
+    image: z.string().optional(),
+    imagePublicId: z.string().optional(),
+    newprice: z.coerce.number()
+        .positive("Price must be greater than zero")
+        .optional(),
+    comparePrice: z.coerce.number().optional(),
+    category: z.string().optional(),
+    quantity: z.coerce.number().min(0, "Quantity cannot be negative").optional(),
+    unit: z.string().optional(),
+    status: z.string().optional(),
+    isFeatured: z.coerce.boolean().optional(),
+});
+
+export async function PATCH(req: Request) {
+    try {
+        await dbConnect();
+        const body = await req.formData(); 
+        const data = Object.fromEntries(body.entries());       
+        const validation = productUpdateSchema.safeParse(data);
+
+        if (!validation.success) {
+            return NextResponse.json({ 
+                message: "Validation error",
+                errors: validation.error 
+            }, { status: 400 });
+        }
+        const { id, ...updateData } = validation.data;
+        const existingProduct = await Product.findById(id);
+        if (!existingProduct) {
+            return NextResponse.json({ message: "Product not found" }, { status: 404 });
+        }
+        const newFile = body.get("image") as File;
+        if (newFile && newFile.size > 0) {
+            
+            await imagekit.deleteFile(existingProduct.imagePublicId).catch(() => null);
+
+            const buffer = Buffer.from(await newFile.arrayBuffer());
+            const ImageUploadResult = await imagekit.upload({
+                file: buffer, 
+                fileName: newFile.name, 
+                folder: "/E-commerce" 
+            });
+            if (!ImageUploadResult || !ImageUploadResult.url) {
+                return NextResponse.json({ message: "Image upload failed" }, { status: 500 });
+            }
+            updateData.image = ImageUploadResult.url;
+            updateData.imagePublicId = ImageUploadResult.fileId;
+        }
+
+        const updatedProduct = await Product.findByIdAndUpdate(
+            id, 
+            {$set: updateData}, 
+            { new: true });
+        if (!updatedProduct) {
+            return NextResponse.json({ message: "Product update failed" }, { status: 500 });
+        }
+        return NextResponse.json({ message: "Product updated successfully", product: updatedProduct }, { status: 200 });
+    } catch (error) {
+        console.log("Finding an error while getting products",error);
+        return NextResponse.json({ message: "Finding an error while getting products" }, { status: 500 });
+    }
+}

@@ -52,5 +52,5 @@ const checkoutSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-export const User =
+export const checkoutUser =
   mongoose.models.User || mongoose.model("Checkout", checkoutSchema);

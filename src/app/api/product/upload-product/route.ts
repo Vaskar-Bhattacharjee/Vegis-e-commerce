@@ -8,6 +8,7 @@ const productSchema = z.object({
     name: z.string(),
     description: z.string(),
     image: z.string().optional(),
+    imagePublicId: z.string().optional(),
     newprice: z.coerce.number().pipe(z.number().positive("Price must be greater than zero")),
     comparePrice: z.coerce.number(),
     category: z.string(),
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
             status: formData.get("status"),
             isFeatured: formData.get("isFeatured"),
         };
-        const parsedData = productSchema.parse(dataToValidate);
+        const parsedData = productSchema.safeParse(dataToValidate);
 
         const buffer = Buffer.from(await file.arrayBuffer());
         const ImageUploadResult = await imagekit.upload({
@@ -56,7 +57,8 @@ export async function POST(req: Request) {
 
         const product = new Product({
             ...parsedData,
-            image: ImageUploadResult.url
+            image: ImageUploadResult.url,
+            imagePublicId: ImageUploadResult.fileId
         });
 
         await product.save();
