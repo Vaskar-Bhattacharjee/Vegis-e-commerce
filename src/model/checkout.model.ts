@@ -47,10 +47,34 @@ const checkoutSchema = new mongoose.Schema(
       type: String,
       required: true,
       trim: true
+    },
+   
+    items: [
+      {
+        productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
+        quantity: { type: Number, required: true },
+        price: { type: Number, required: true }
+      }
+    ],
+    totalAmount: { type: Number, required: true },
+    status: { 
+    type: String, 
+    enum: ["Awaiting Payment", "Pending", "Confirmed", "Processing", "Shipped", "Delivered", "Cancelled"],
+    default: "Pending"
+  },
+  stripeSessionId: { 
+        type: String, 
+        unique: true, 
+        sparse: true
+    },
+    paymentMethod: { 
+        type: String, 
+        enum: ["COD", "Online"], 
+        required: true 
     }
   },
   { timestamps: true }
 );
 
-export const checkoutUser =
-  mongoose.models.User || mongoose.model("Checkout", checkoutSchema);
+export const checkout =
+  mongoose.models.Checkout || mongoose.model("Checkout", checkoutSchema);
