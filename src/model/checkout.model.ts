@@ -9,7 +9,7 @@ const checkoutSchema = new mongoose.Schema(
     },
     lastname: {
       type: String,
-      required: true,
+      required: false,
       trim: true
     },
     country: {
@@ -34,7 +34,8 @@ const checkoutSchema = new mongoose.Schema(
       required: true
     },
     addressLine2: {
-      type: String
+      type: String,
+      required: false
     },
     email: {
       type: String,

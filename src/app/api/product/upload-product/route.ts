@@ -39,6 +39,13 @@ export async function POST(req: Request) {
             isFeatured: formData.get("isFeatured"),
         };
         const parsedData = productSchema.safeParse(dataToValidate);
+        if (!parsedData.success) {
+            return NextResponse.json({ 
+                message: "Validation failed", 
+                errors: parsedData.error
+            }, { status: 400 });
+}
+        const validatedData = parsedData.data;
 
         const buffer = Buffer.from(await file.arrayBuffer());
         const ImageUploadResult = await imagekit.upload({
@@ -56,7 +63,7 @@ export async function POST(req: Request) {
         console.log("Image URL:", ImageUploadResult.url);
 
         const product = new Product({
-            ...parsedData,
+            ...validatedData,
             image: ImageUploadResult.url,
             imagePublicId: ImageUploadResult.fileId
         });

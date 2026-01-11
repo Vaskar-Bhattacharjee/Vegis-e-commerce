@@ -10,7 +10,7 @@ export const checkoutSchemaZod = z.object({
   firstname: z.string().min(2, "First name is too short"),
   lastname: z.string().min(2, "Last name is too short"),
   email: z.email("Invalid email address"),
-  phone: z.string().min(11, "Phone number must be at least 10 digits"),
+  phone: z.string().min(11, "Phone number must be at least 11 digits"),
   country: z.string().default("Bangladesh"),
   state: z.string().min(1, "State is required"),
   city: z.string().min(1, "City is required"),
@@ -18,7 +18,12 @@ export const checkoutSchemaZod = z.object({
   addressLine1: z.string().min(5, "Address is too short"),
   addressLine2: z.string().optional(),
   paymentMethod: z.enum(["COD", "Online"]), 
-  saveInfo: z.boolean().default(false),
+  totalAmount: z.number().positive(),
+  items: z.array(z.object({           
+    productId: z.string(),
+    quantity: z.number().int().positive(),
+    price: z.number().positive()
+  })),
 });
 
 export async function POST(request: Request) {
@@ -35,21 +40,22 @@ export async function POST(request: Request) {
         }
 
         const initialPaymentStatus = parsedData.data.paymentMethod === "COD" ? "Pending" : "Awaiting Payment";
-
-        if (parsedData.data.paymentMethod === "COD") {
-
-            const checkoutData = await checkout.create({
+        const newOrder = await checkout.create({
             ...parsedData.data,
             status: initialPaymentStatus
         });
 
+        if (parsedData.data.paymentMethod === "COD") {
+
         return NextResponse.json({
             message: "Cash on Delivery",
-            checkoutData
+            orderId: newOrder._id,
+            order: newOrder
         }, { status: 200 });
 
         }
         if (parsedData.data.paymentMethod === "Online") {
+
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ['card'],
                 line_items: [
@@ -69,17 +75,8 @@ export async function POST(request: Request) {
                 cancel_url: `${process.env.NEXT_PUBLIC_URL}/checkout/cancel`,
 
                 metadata: {
-                    firstname: parsedData.data.firstname,
-                    lastname: parsedData.data.lastname,
-                    email: parsedData.data.email,
-                    phone: parsedData.data.phone,
-                    country: parsedData.data.country,
-                    state: parsedData.data.state,
-                    city: parsedData.data.city,
-                    postcode: parsedData.data.postcode,
-                    addressLine1: parsedData.data.addressLine1,
-                    addressLine2: parsedData.data.addressLine2 || "",
-                    paymentMethod: "Online"
+                   order_id: newOrder._id.toString(),
+                   email: parsedData.data.email,
                 },
             });
             if (!session.url) {
@@ -87,7 +84,6 @@ export async function POST(request: Request) {
             }
             return NextResponse.json({
                 message: "Online Payment",
-
                 checkoutUrl: session.url
             }, { status: 200 });
         }
