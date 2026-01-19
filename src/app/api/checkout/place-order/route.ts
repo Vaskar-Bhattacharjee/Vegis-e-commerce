@@ -7,8 +7,8 @@ import Stripe from "stripe";
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
 export const checkoutSchemaZod = z.object({
-  firstname: z.string().min(2, "First name is too short"),
-  lastname: z.string().min(2, "Last name is too short"),
+  firstname: z.string(),
+  lastname: z.string(),
   email: z.email("Invalid email address"),
   phone: z.string().min(11, "Phone number must be at least 11 digits"),
   country: z.string().default("Bangladesh"),
@@ -58,14 +58,16 @@ export async function POST(request: Request) {
 
             const session = await stripe.checkout.sessions.create({
                 payment_method_types: ['card'],
+                customer_email: parsedData.data.email,
                 line_items: [
                     {
                         price_data: {
                             currency: 'usd',
                             product_data: {
                                 name: 'Total Order Payment',
+                                description: `Order for ${parsedData.data.firstname} ${parsedData.data.lastname}`
                             },
-                            unit_amount: 5000, // Example amount in cents
+                            unit_amount: Math.round(parsedData.data.totalAmount * 100), 
                         },
                         quantity: 1,
                     }

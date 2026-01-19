@@ -1,4 +1,4 @@
-import { PasswordResetTemplate } from '@/src/components/password-reset-template';
+import { PasswordResetTemplate } from '@/src/components/email/password-reset-template';
 import { Resend } from 'resend';
 
 const resend = new Resend(process.env.RESEND_API_KEY);

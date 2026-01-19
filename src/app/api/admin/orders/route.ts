@@ -19,7 +19,7 @@ export async function GET(request: Request) {
 
             return NextResponse.json({
                 success: true,
-                message: "Order list fetched successfully",
+                message: "For Admin successfully order list fetched",
                 orders,
                 totalOrders: await checkout.countDocuments(query)
             }, { status: 200 });

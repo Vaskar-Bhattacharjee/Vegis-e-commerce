@@ -7,10 +7,12 @@ export async function GET() {
         await dbConnect();
         const lowStockCount = await Product.countDocuments({ quantity: { $lt: 10 } });
         const pendingOrders = await checkout.countDocuments({ status: "Pending" });
+        const confirmedOrders = await checkout.countDocuments({ status: "Confirmed" });
         
         return NextResponse.json({
             lowStockCount,
             pendingOrders,
+            confirmedOrders,
             // totalRevenue, etc.
         });
     } catch (error) {

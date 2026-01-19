@@ -29,6 +29,10 @@ const productSchema = new mongoose.Schema({
       type: String,
       required: true
     },
+    newArrival: {
+      type: Boolean,
+      default: false
+    },
     quantity: {
       type: Number,
       required: true,
@@ -36,8 +40,8 @@ const productSchema = new mongoose.Schema({
     },
     unit: {
       type: String,
-      enum: ["kg", "gram", "piece", "dozen", "liter"],
-      default: "kg"
+      enum: [ "piece", "dozen"],
+      default: "piece"
     },
     status: {
       type: String,

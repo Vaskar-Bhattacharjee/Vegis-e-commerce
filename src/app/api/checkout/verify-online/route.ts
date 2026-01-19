@@ -19,31 +19,27 @@ export async function GET(request: Request) {
         
         if (session.payment_status === "paid") {
             const m = session.metadata;
-            const checkoutData = await checkout.create(
-                   {
-                    firstname: m?.firstname,
-                    lastname: m?.lastname,
-                    email: m?.email,
-                    phone: m?.phone,
-                    country: m?.country,
-                    state: m?.state,
-                    city: m?.city,
-                    postcode: m?.postcode,
-                    addressLine1: m?.addressLine1,
-                    addressLine2: m?.addressLine2,
-                    paymentMethod: "Online",
-                    status: "confirmed"
-                }
-            );
+            console.log("metadata checking: ",m);
+            
+            const ordererDetails = await checkout.findOne({
+                _id: m?.order_id,
+                status: "Awaiting Payment",
+                paymentMethod: "Online",
+            });
+            if (!ordererDetails) {
+                return NextResponse.json({ message: "Order not found" }, { status: 404 });
+            }
+            ordererDetails.status = "Confirmed";
+            await ordererDetails.save();
 
             return NextResponse.json({
                 message: "Payment successful",
-                checkoutData
+                checkoutData: ordererDetails.toJSON()
             }, { status: 200 });
         }
 
     } catch (error) {
-        console.log("", error);
+        console.log("Error verifying online payment", error);
         return NextResponse.json({ message: "Internal Server Error" }, { status: 500 });
     }
 }
