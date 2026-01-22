@@ -2,9 +2,9 @@
 import { Container } from "@/src/components/ui/container";
 import { cn } from "../../lib/utils";
 import { IconJewishStar, IconMenu2, IconSearch, IconShoppingBag, IconX } from "@tabler/icons-react";
-// import { ModeToggle } from "./mode-toggle";
 import { useState } from "react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 
 const navLinks = [
     { name: "Home", href: "/" },
@@ -45,9 +45,9 @@ export const DesktopNavbar = () => {
                 <ul className={cn("flex gap-8")}>
                     {navLinks.map((link) => (
                         <li key={link.name} className="group ">
-                            <a href={link.href} className={cn("text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100  text-xl font-semibold font-cormorantGaramond")}>
+                            <Link href={link.href} className={cn("text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100  text-xl font-semibold font-cormorantGaramond")}>
                                 {link.name}
-                            </a>
+                            </Link>
                             <div className=" w-0 group-hover:w-full transition-all duration-300 h-[0.7px] bg-black dark:bg-white"></div>
                         </li>
                     ))}

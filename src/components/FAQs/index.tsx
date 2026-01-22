@@ -54,13 +54,12 @@ export const FAQs = () => {
                             onClick={() => toggleItem(index)}
                             className="flex items-center justify-between cursor-pointer lg:w-200 group"
                         >
-                            <h3 className="text-lg md:text-[28px] font-bold text-neutral-900 md:mb-2 group-hover:text-neutral-600 transition-colors">
+                            <h3 className="text-lg md:text-[28px] font-bold text-neutral-800 md:mb-2 group-hover:text-neutral-600 transition-colors">
                                 {item.question}
                             </h3>
 
-                            {/* --- THE ROTATING ICON BOX --- */}
+                            
                             <div className="relative size-6 flex items-center justify-center">
-                                {/* The Plus Sign: Rotates and fades out when open */}
                                 <motion.div
                                     animate={{ 
                                         rotate: isOpen ? 90 : 0, 
@@ -72,7 +71,6 @@ export const FAQs = () => {
                                     <IconPlus className="size-6 text-black" />
                                 </motion.div>
 
-                                {/* The Minus Sign: Starts at -90deg and rotates into view */}
                                 <motion.div
                                     initial={{ rotate: -90, opacity: 0 }}
                                     animate={{ 
@@ -87,7 +85,6 @@ export const FAQs = () => {
                             </div>
                         </div>
 
-                        {/* --- SMOOTH CONTENT EXPANSION --- */}
                         <AnimatePresence>
                             {isOpen && (
                                 <motion.div
@@ -97,7 +94,7 @@ export const FAQs = () => {
                                     transition={{ duration: 0.3, ease: "easeInOut" }}
                                     className="overflow-hidden"
                                 >
-                                    <p className="text-neutral-700 w-80 md:w-110 lg:w-190 pt-4 text-lg font-semibold">
+                                    <p className="text-neutral-600 w-80 md:w-110 lg:w-190 pt-4 text-lg font-semibold">
                                         {item.answer}
                                     </p>
                                 </motion.div>

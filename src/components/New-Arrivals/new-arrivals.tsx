@@ -8,10 +8,10 @@ export const NewArrivalsItemCard = ({ imgSrc, productName, price }: { imgSrc: st
 
     return (
         <div className="group cursor-pointer">
-            {/* The Perspective wrapper is invisible but allows the 3D effect to look real */}
             <div style={{ perspective: "1000px" }}>
                 <motion.div
-                    // RESTORED: Your exact original size and structure
+                    initial={{ y: 30, opacity: 0 }}
+                    whileInView={{ y: 0, opacity: 1 }}
                     className="relative w-82.5 h-87.5 overflow-hidden rounded-2xl group"
                     animate={{ rotateY: rotateY }}
                     transition={{ type: "spring", stiffness: 100, damping: 20 }}
