@@ -99,7 +99,7 @@ export const MobileNavbar = () => {
                 style={{
                     backdropFilter: "blur(15px)",
                 }}
-                className="absolute top-20 inset-x-0 w-full h-screen bg-white dark:bg-gray-900 shadow-md flex flex-col items-center justify-start space-y-6 py-6 z-10">
+                className="absolute top-20 inset-x-0 w-full h-screen bg-white dark:bg-gray-900 shadow-md flex flex-col items-center justify-start space-y-6 py-6 z-60">
                     {navLinks.map((link) => (
                         <motion.a
                                 initial={{ opacity: 0, y: -20 }}
@@ -119,15 +119,15 @@ export const MobileNavbar = () => {
     )
 }
 
-export const Input = ({ className }: { className?: string}) => {
+export const Input = ({ className, placeholder, removeIcon }: { className?: string, placeholder?: string, removeIcon?: boolean}) => {
     return (
             <div className={cn("flex gap-0 md:gap-3 w-34 md:w-64 h-8 md:h-10 px-2.5 py-1 justify-center items-center shadow-input dark:shadow-input-dark rounded-lg", className)}>
                 <input
                     type="text"
-                    placeholder="Search..."
+                    placeholder={placeholder}
                     className="pl-2 md:pl-4 font-quicksand text-gray-600 dark:text-gray-300 text-xs md:text-[15px] font-semibold placeholder-gray-400 flex-1  focus:outline-none "
                 />
-                <IconSearch className={cn("text-neutral-500 dark:text-gray-300 cursor-pointer size-6")} />
+                {!removeIcon && <IconSearch className={cn("text-neutral-500 dark:text-gray-300 cursor-pointer size-6")} />}
             </div>
     )
 }

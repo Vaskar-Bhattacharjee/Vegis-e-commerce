@@ -13,12 +13,11 @@ export const Footer = () => {
           "absolute inset-0",
           "bg-size-[35px_35px]",
           "bg-[linear-gradient(to_right,#e4e4e7_1px,transparent_1px),linear-gradient(to_bottom,#e4e4e7_1px,transparent_1px)]",
-            "opacity-7 mask-l-from-70% mask-r-from-70% mask-t-from-70% mask-b-from-70% ",
+          "opacity-7 mask-l-from-70% mask-r-from-70% mask-t-from-70% mask-b-from-70% ",
         )}
-      />
-    
-            <div className="z-1 grid grid-cols-5 gap-8 py-10 px-16 ">
-                <div className="py-4 mx-auto px-4 flex flex-col col-span-2 items-start justify-between gap-2 lg:mr-18">
+      />    
+            <div className="z-1 grid grid-cols-1 md:grid-cols-5 gap-8 py-10 px-16 ">
+                <div className="py-4 mx-auto px-4 flex flex-col col-span-2 items-start justify-between gap-1 lg:mr-18">
                     <Logo className="text-white md:text-6xl -mb-3 col-span-1" />
                     <p className="text-sm font-semibold text-left text-neutral-400 w-full    mt-2">
                             Fashioneate is where timeless elegance meets modern craftsmanship. 
@@ -28,7 +27,7 @@ export const Footer = () => {
                     </p>
                     <div className="flex gap-2 mt-5">
                         <span className="text-neutral-400 text-md font-semibold">Follow us on:</span>
-                        <div className="flex gap-3">
+                        <div className="flex gap-2 md:gap-3">
                             <Link href="#" className="text-neutral-400 hover:text-white transition-colors"><IconBrandLinkedin /></Link>
                             <Link href="#" className="text-neutral-400 hover:text-white transition-colors"><IconBrandX /></Link>
                             <Link href="#" className="text-neutral-400 hover:text-white transition-colors"><IconBrandGithub /></Link>
@@ -86,10 +85,14 @@ export const GridElement = ({
     return (
                <div className="flex flex-col gap-4 lg:pt-10">
                     <h4 className="text-lg font-bold mb-4">{heading}</h4>
+                    
+                    <div className="flex flex-col gap-2">
                     <Link href="#" className="text-neutral-400 hover:text-white transition-colors">{element1}</Link>
                     <Link href="#" className="text-neutral-400 hover:text-white transition-colors">{element2}</Link>
                     <Link href="#" className="text-neutral-400 hover:text-white transition-colors">{element3}</Link>
                     <Link href="#" className="text-neutral-400 hover:text-white transition-colors">{element4}</Link>
+                    </div>
+                   
                 </div>
     );
 }

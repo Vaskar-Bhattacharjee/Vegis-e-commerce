@@ -10,7 +10,7 @@ export const BarView = ({ className, size = 16,rotate, ...props }: BarViewProps)
   return (
     <div 
       {...props}
-    className={cn("size-10 flex justify-center items-center bg-transparent border border-neutral-400 hover:border-neutral-600 cursor-pointer rounded-md", className)}>
+    className={cn("size-8 md:size-10 flex justify-center items-center bg-transparent border border-neutral-400 hover:border-neutral-600 cursor-pointer rounded-md", className)}>
       <svg
       width={size}
       height={size}
@@ -41,9 +41,9 @@ export const BarViewThree = ({
   return (
     <div 
     {...props}
-    className={cn("size-10 flex justify-center items-center bg-transparent border border-neutral-400 hover:border-neutral-600 cursor-pointer rounded-md", className)}>
+    className={cn("hidden md:size-10  md:flex justify-center items-center bg-transparent border border-neutral-400 hover:border-neutral-600 cursor-pointer rounded-md", className)}>
       <svg 
-      className={cn("shrink-0", className)}
+      className={cn("hidden md:flex shrink-0", className)}
       width={size}
       height={size}
       viewBox="0 0 16 16" 
@@ -66,13 +66,13 @@ export const BarViewTwo = ({
   return (
     <div
     {...props}
-    className={cn("size-10 flex justify-center items-center bg-transparent border border-neutral-400 hover:border-neutral-600 cursor-pointer rounded-md", className)}>
+    className={cn("hidden md:size-10 md:flex justify-center items-center bg-transparent border border-neutral-400 hover:border-neutral-600 cursor-pointer rounded-md", className)}>
         <svg 
           width={size}
           height={size}
           viewBox="0 0 16 16"
           fill="currentColor"         
-          className={cn("shrink-0", className)}
+          className={cn("hidden md:flex shrink-0", className)}
           
         >
                 <rect x="1" y="1" width="6" height="14"></rect>
@@ -90,7 +90,7 @@ export const GridView = ({
   return (
     <div 
     {...props}
-    className={cn("size-10 flex justify-center items-center bg-transparent border border-neutral-400 hover:border-neutral-600 cursor-pointer rounded-md", className)}>
+    className={cn("size-8 md:size-10 flex justify-center items-center bg-transparent border border-neutral-400 hover:border-neutral-600 cursor-pointer rounded-md", className)}>
        <svg 
        className={cn("shrink-0", className)}
        width={size}

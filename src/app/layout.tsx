@@ -3,6 +3,7 @@ import { Quicksand, Cormorant_Garamond, Roboto } from "next/font/google";
 import "./globals.css";
 import  {Navbar}  from "@/src/components/ui/navbar";
 import { ThemeProvider } from "../components/ui/theme-provider";
+import { Footer } from "../components/Footer/footer";
 
 const quicksand = Quicksand({
   variable: "--font-quicksand",
@@ -40,6 +41,7 @@ export default function RootLayout({
       <main>
         {children}
       </main>
+      <Footer />
       </ThemeProvider>
       </body>
     </html>

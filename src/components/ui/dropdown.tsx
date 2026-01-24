@@ -19,7 +19,9 @@ export const Dropdown = ({
       const [display, setDisplay] = useState<string>("")
 
     return(
-            <div className="relative z-20">  
+            <div className={cn("relative z-20",
+                open && "z-50"
+            )}>  
             <div
             onClick={()=> {
               setOpen(!open)
@@ -42,7 +44,7 @@ export const Dropdown = ({
             initial={{y:30, opacity: 0 }}   
             animate={{y:0, opacity: 1}}
             transition={{duration: 0.2}}
-            className="flex flex-col items-start pl-4 gap-4 justify-center w-40 bg-white border border-neutral-300 rounded-lg py-3 absolute top-10">
+            className="flex flex-col items-start pl-4 gap-4 justify-center w-55 md:w-40 bg-white border border-neutral-300 rounded-lg py-3 absolute top-9 md:top-10">
              
              {
                 items.map((item)=>{
