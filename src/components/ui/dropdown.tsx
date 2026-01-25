@@ -47,18 +47,25 @@ export const Dropdown = ({
             className="flex flex-col items-start pl-4 gap-4 justify-center w-55 md:w-40 bg-white border border-neutral-300 rounded-lg py-3 absolute top-9 md:top-10">
              
              {
-                items.map((item)=>{
+                items.map((item, index)=>{
                   return(
-                    <p
+                    <motion.p
                     key={item}
+                    initial={{y:30, opacity: 0 }}   
+                    animate={{y:0, opacity: 1}}
+                    transition={{ 
+                    delay: index * 0.05, // 0.05 is the sweet spot for "snappy" fashion sites
+                    duration: 0.3,
+                    ease: "easeOut"
+                    }}
                     onClick={()=>{
                       setDisplay(item)
                       setOpen(false)
                       onSelect(item)
                     }}
-                    className="text-neutral-500 font-semibold text-[16px] cursor-pointer hover:text-neutral-800 w-full">
+                    className="text-neutral-500 font-semibold text-[16px] cursor-pointer hover:text-neutral-800  w-full">
                       {item}
-                    </p>
+                    </motion.p>
                   )
                 })
              }
